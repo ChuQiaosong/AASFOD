@@ -34,7 +34,7 @@ This is a four stage training process:
 
 **Stage1: Pretrain model using cityscapes training dataset**
 ```
-CUDA_VISIBLE_DEVICES="your gpu id" python trainval_pretrain_adv.py --dataset cs --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path"
+python trainval_pretrain_adv.py --dataset cs --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path"
 ```
 
 **Stage2: Select source_similar data and source_dissimilar data**
@@ -43,21 +43,21 @@ CUDA_VISIBLE_DEVICES="your gpu id" python trainval_pretrain_adv.py --dataset cs 
 
 2. Change line 224 and 231 in select_by_uncertainty.py to localize the path of train.txt in foggy_cityscapes_similar(disimilar)/ImageSets/Main
 ```
-CUDA_VISIBLE_DEVICES="your gpu id" python select_by_uncertainty.py --dataset_t cs_fg --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path" --load_name "path of checkpoint of stage1"
+python select_by_uncertainty.py --dataset_t cs_fg --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path" --load_name "path of checkpoint of stage1"
 ```
 
 **Stage3: TSD adversarial training with mean teacher**
 ```
-CUDA_VISIBLE_DEVICES="your gpu id" python trainval_adv_mt.py --epochs 30 --dataset cs_fg_similar --dataset_t cs_fg_disimilar --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path" --load_name "path of checkpoint of stage1"
+python trainval_adv_mt.py --epochs 30 --dataset cs_fg_similar --dataset_t cs_fg_disimilar --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path" --load_name "path of checkpoint of stage1"
 ```
 
 **Stage4: Fine-tune with False negative simulation**
 ```
-CUDA_VISIBLE_DEVICES="your gpu id" python trainval_adv_mosaic_mt.py --epochs 20 --dataset cs_fg --dataset_t cs_fg_similar --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path" --load_name "path of checkpoint of stage3"
+python trainval_adv_mosaic_mt.py --epochs 20 --dataset cs_fg --dataset_t cs_fg_similar --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path" --load_name "path of checkpoint of stage3"
 ```
 &nbsp;
 ## Test
 ```
-CUDA_VISIBLE_DEVICES="your gpu id" python test_net_adv.py --dataset_t cs_fg --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path" --load_name "path of checkpoint of stage4"
+python test_net_adv.py --dataset_t cs_fg --net vgg16 --log_ckpt_name "your own path" --save_dir "your own path" --load_name "path of checkpoint of stage4"
 ```
 
